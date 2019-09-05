@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjs.springbootdemo.dao.UserDao">
+	<sql id="user_property">
+		id,name,password
+	</sql>
+
+	<select id="select" resultType="com.wjs.springbootdemo.domain.User" >
+		select
+			<include refid="user_property" />
+		from
+			user
+		where
+			id = #{id}
+	</select>
+	<insert id="insert" parameterType="com.wjs.springbootdemo.domain.User" >
+		insert into
+			user(name,password)
+		values
+			(#{name}
+			,#{password})
+	</insert>
+	<delete id="delete">
+		delete from
+			user
+		where
+			id = #{id}
+	</delete>
+	<update id="update" parameterType="com.wjs.springbootdemo.domain.User" >
+		update
+			user
+		set
+			name = #{name}
+			,password = #{password}
+		where
+			id = #{id}
+	</update>
+	<select id="getRoleByUserNmae" resultType="com.wjs.springbootdemo.domain.Role">
+		select
+			id,role_name,user_id
+		from
+			role
+		where
+			user_id = (
+				select
+					id
+				from
+					user
+				where
+					name = #{username}
+			)
+	</select>
+	<select id="selectByName" resultType="com.wjs.springbootdemo.domain.User">
+		select
+			<include refid="user_property" />
+		from
+			user
+	  	where
+			name = #{name}
+	</select>
+</mapper>
